@@ -6,19 +6,15 @@ const createEsbuildPlugin = require("@badeball/cypress-cucumber-preprocessor/esb
 module.exports = defineConfig({
   projectId: "6o6vf9",
   e2e: {
-    async setupNodeEvents(on, config) {
-        const bundler = createBundler({
-            plugins: [createEsbuildPlugin(config)],
-        });
-        on("file:preprocessor", bundler);
-        await addCucumberPreprocessorPlugin(on,config);
+    setupNodeEvents(on, config) {
 
-        return config;
     },
 //    specPattern: "cypress/e2e/features/*.{feature, features}",
     experimentalStudio: true,
     supportFile: false,
     baseUrl:"https://react-redux.realworld.io", //specified the base url
+    image: "cypress/included:10.7.0",
+    workdir: "/staffbase-project",
     reporter: "cypress-multi-reporters",
     reporterOptions: {
         reporterEnabled: "mochawesome",
