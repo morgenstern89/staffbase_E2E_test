@@ -9,29 +9,34 @@ pipeline{
         ansiColor('xterm')
     }
 
+    tools {nodejs "node"}
+
     stages{
-        stage('Build'){
-            steps{
-                echo "Building the application"
+        stage('Staffbase E2E Test Suite'){
+            parallel {
+                stage('Slave Node1'){
+                    agent {
+                        label "remote_node1"
+                    }
+                    steps {
+                        git url: 'https://github.com/morgenstern89/staffbase_e2e_test.git'
+                        bat 'npm install'
+                        bat 'npm update'
+                        bat 'npm run triggerAllTests-staffbase-dashboard'
+                    }
+                }
+                 stage('Slave Node2'){
+                    agent {
+                        label "remote_node2"
+                    }
+                    steps {
+                        git url: 'https://github.com/morgenstern89/staffbase_e2e_test.git'
+                        bat 'npm install'
+                        bat 'npm update'
+                        bat 'npm run triggerAllTests-staffbase-dashboard'
+                    }
+                }
             }
+        }
 
-        }
-        stage('Testing'){
-            steps{
-                bat "npm i"
-                bat "npm run test"
-            }
-        }
-        stage('Deploying'){
-            steps{
-                echo "Deploy the application"
-            }
-
-        }
-    }
-    post{
-        always{
-            publishHTML([allowMissing:false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'cypress/reports/', reportFiles: 'TestResults.html, coverage/index.html', reportTitles: 'Test Results, Coverage',reportName: 'Test Results Left side link'])
-        }
-    }
 }
