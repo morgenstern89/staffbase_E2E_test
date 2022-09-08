@@ -1,6 +1,6 @@
 
 Cypress.Commands.add("SignIn", ()=>{
-        cy.visit('/#/login') //the base url configured in cypress.config.js file will enable open the page
+        cy.visit('http://react-redux.realworld.io/#/login') //the base url configured in cypress.config.js file will enable open the page
         cy.title().should('eq','Conduit')
         cy.location('protocol').should('eq','https:')
 

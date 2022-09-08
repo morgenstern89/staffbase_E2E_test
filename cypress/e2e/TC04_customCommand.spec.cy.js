@@ -3,9 +3,9 @@ describe("Create, mark and unmark as favorite", function(){
 
     Cypress.config('pageLoadTimeout', 10000)
 
-    before(function(){
-           cy.SignIn() //replaced by the customCommand
-        }) //using Mocha hook "before"
+    before(function () {
+      cy.SignIn()
+    })
 
     it('Create Post', function(){
             const uuid = () => Cypress._.random(0, 1e6);
@@ -29,7 +29,7 @@ describe("Create, mark and unmark as favorite", function(){
 
     it('Mark and unmark as favorite', function() {
 
-            cy.get('ul.nav').children().contains('beluga89').click()
+            cy.get('ul.navbar-nav').children().contains('beluga89').click()
             cy.contains('My Articles').should('be.visible')
             cy.get('.ion-heart').first().click()
             cy.contains('Favorited Articles').click()
