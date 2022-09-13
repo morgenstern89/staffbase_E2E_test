@@ -3,9 +3,9 @@ describe("Create, mark and unmark as favorite", function(){
 
     Cypress.config('pageLoadTimeout', 10000)
 
-    before(function () {
+    before(function(){
       cy.SignIn()
-    })
+   });
 
     it('Create Post', function(){
             const uuid = () => Cypress._.random(0, 1e6);
@@ -34,6 +34,7 @@ describe("Create, mark and unmark as favorite", function(){
             cy.get('.ion-heart').first().click()
             cy.contains('Favorited Articles').click()
             cy.url().should('include', 'favorites')
+            Cypress.on('uncaught:exception', () => false)
             cy.get('.ion-heart',{timeout:10000}).first().click()
             cy.reload()
             cy.contains('No articles are here... yet.').should('be.visible')

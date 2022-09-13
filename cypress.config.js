@@ -6,29 +6,38 @@ const createEsbuildPlugin = require("@badeball/cypress-cucumber-preprocessor/esb
 module.exports = defineConfig({
   projectId: "6o6vf9",
   e2e: {
-    setupNodeEvents(on, config) {
+     async setupNodeEvents(on, config) {
+          const bundler = createBundler({
+            plugins: [createEsbuildPlugin(config)],
+          });
 
-    },
-//    specPattern: "cypress/e2e/features/*.{feature, features}",
-    experimentalStudio: true,
-    supportFile: false,
-    baseUrl:"https://react-redux.realworld.io", //specified the base url
-    image: "cypress/included:10.7.0",
-    workdir: "/staffbase-project",
-    reporter: "cypress-multi-reporters",
-    reporterOptions: {
-        reporterEnabled: "mochawesome",
-        mochawesomeReporterOptions: {
-            reportDir: "cypress/reports/mocha",
-            screenshotOnRunFailure: true,
-            quite: true,
-            overwrite: false,
-            html: false,
-            json: true
-        }
+          on("file:preprocessor", bundler);
+          await addCucumberPreprocessorPlugin(on, config);
+
+          return config;
+         },
+     baseUrl:"https://react-redux.realworld.io",//specified the base url
+     specPattern: "cypress/e2e/features/**/*.{feature, features}",
+     supportFile: "cypress/support/commands.js",
+     experimentalStudio: true,
+     reporter: "cypress-multi-reporters",
+          reporterOptions: {
+             reporterEnabled: "mochawesome",
+             mochawesomeReporterOptions: {
+                 reportDir: "cypress/reports/mocha",
+                 screenshotOnRunFailure: true,
+                 quite: true,
+                 overwrite: false,
+                 html: false,
+                 json: true
+             }
+   },
+
+     image: "cypress/included:10.7.0",
+     workdir: "/staffbase-project"
+
   },
-  screenshotsFolder: "cypress/reports/mochareports/screenshots"
-}
-})
+     screenshotsFolder: "cypress/reports/mochareports/screenshots"
+});
 
 
